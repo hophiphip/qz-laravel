@@ -47,7 +47,7 @@ class QuizController extends Controller
         if ($answers == null) {
             return response(json_encode([
                 'error' => 'incorrect request parameters'
-            ]), 400)->header('Content-Type', 'application/json');
+            ]), 422)->header('Content-Type', 'application/json');
         }
 
         // Validate the quiz
@@ -82,7 +82,7 @@ class QuizController extends Controller
         if ($quiz == null) {
             return response(json_encode([
                 'error' => 'incorrect quiz parameters'
-            ]), 400)->header('Content-Type', 'application/json');
+            ]), 422)->header('Content-Type', 'application/json');
         }
 
         $newQuiz = Quiz::create($quiz);
