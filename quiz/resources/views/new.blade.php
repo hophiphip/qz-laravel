@@ -9,8 +9,8 @@
 
     <link rel="icon" href="/favicon.png">
 
-    <link href="/css/app.css'" rel="stylesheet" />
-    <link href="/css/new.css'" rel="stylesheet" />
+    <link href="/css/app.css" rel="stylesheet" />
+    <link href="/css/new.css" rel="stylesheet" />
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
