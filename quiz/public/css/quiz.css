@@ -1,0 +1,21 @@
+.quiz-title {
+    text-align: center;
+    background: #353535;
+}
+
+.quiz-question {
+    background: #151515;
+}
+
+.quiz-choices {
+    margin-left: 2rem;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.result-container {
+    text-align: center;
+}

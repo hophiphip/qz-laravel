@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </head>
 
-<!-- Add one question per page feature and make it default but the user can choose to show all questions at once -->
+<!-- TODO: Add one question per page feature and make it default but the user can choose to show all questions at once -->
 
 <body>
     @include('shared.gohome')
