@@ -26,6 +26,10 @@ jobs:
       working-directory: quiz
       run: cp -n .env.example.local .env
       
+    - name: Install Mongo DB dependency
+      working-directory: quiz
+      run: apt install php-mongodb
+      
     - name: Install Dependencies
       working-directory: quiz
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
