@@ -10,6 +10,65 @@ use App\DTO\AnswersDTO;
 use App\Service\QuizResultService;
 use PHPUnit\Framework\TestCase;
 
+/**
+ *  Test data:
+ *      Quiz:
+ *      {
+ *          uuid: '1',
+ *          title: 'Animals',
+ *          questions: [
+ *              {
+ *                  uuid: '1-1',
+ *                  text: 'Who is bigger?',
+ *                  choices: [
+ *                      {
+ *                          uuid: '1-1-1',
+ *                          text: 'an elephant',
+ *                          isCorrect: 'true',
+ *                      },
+ *                      {
+ *                          uuid: '1-1-2'.
+ *                          text: 'a mouse',
+ *                          isCorrect: 'false',
+ *                      }
+ *                  ]
+ *              },
+ *              {
+ *                  uuid: '1-2',
+ *                  text: 'Who is smaller?',
+ *                  choices: [
+ *                      {
+ *                          uuid: '1-2-1',
+ *                          text: 'an elephant',
+ *                          isCorrect: 'false',
+ *                      },
+ *                      {
+ *                          uuid: '1-2-2'.
+ *                          text: 'a mouse',
+ *                          isCorrect: 'true',
+ *                      }
+ *                  ]
+ *              }
+ *          ]
+ *      }
+ *
+ *
+ *      Answers:
+ *      {
+ *          quizUUID: '1',
+ *          answers: [
+ *              {
+ *                  questionUUID: '1-1',
+ *                  choices: [ '1-1-1' ]
+ *              },
+ *              {
+ *                  questionUUID: '1-2',
+ *                  choices: [ '1-2-1' ]
+ *              }
+ *          ]
+ *      }
+ */
+
 class BaseQuizTest extends TestCase
 {
     protected $quizDTO;
@@ -20,7 +79,7 @@ class BaseQuizTest extends TestCase
         $this->quizDTO = $this->makeQuizDTO();
         $this->answersDTO = $this->makeAnswersDTO();
     }
-    
+
     public function testBasicTest()
     {
         $quiz = $this->makeQuizDTO();
@@ -29,7 +88,7 @@ class BaseQuizTest extends TestCase
             $this->quizDTO,
             $this->answersDTO
         );
-        
+
         $result = $quizResultService->getResult();
 
         $this->assertEquals(0.50, $result);
