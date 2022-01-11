@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['json.response']], function () {
+
+    // Submit and validate quiz result
+    Route::post('/submit', [QuizController::class, 'submit']);
+
+    // Submit a new quiz
+    Route::post('/new', [QuizController::class, 'store']);
 });
