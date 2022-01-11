@@ -9,9 +9,9 @@
 
     <title>Quiz Not Found</title>
 
-    <link rel="icon" href="{{ asset('favicon.png') }}">
+    <link rel="icon" href="/favicon.png">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+    <link href="/css/app.css" rel="stylesheet" />
 
     <style>
         html, body {

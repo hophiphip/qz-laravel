@@ -7,10 +7,10 @@
 
     <title>Quizzes</title>
 
-    <link rel="icon" href="{{ asset('favicon.png') }}">
+    <link rel="icon" href="/favicon.png">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/index.css') }}" rel="stylesheet" />
+    <link href="/css/app.css" rel="stylesheet" />
+    <link href="/css/index.css" rel="stylesheet" />
 </head>
 
 <body>

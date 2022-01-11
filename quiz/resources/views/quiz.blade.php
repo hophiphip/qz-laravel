@@ -7,10 +7,10 @@
 
     <title>Solve a Quiz</title>
 
-    <link rel="icon" href="{{ asset('favicon.png') }}">
+    <link rel="icon" href="/favicon.png">
 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/quiz.css') }}" rel="stylesheet" />
+    <link href="/css/app.css" rel="stylesheet" />
+    <link href="/css/quiz.css" rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </head>
