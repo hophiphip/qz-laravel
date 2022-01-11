@@ -21,13 +21,36 @@ services:
     container_name: quiz-nginx
     restart: unless-stopped
     ports:
-      - 8000:80
+      - "8000:80"
     volumes:
       - ./quiz/:/var/www
       - ./.docker/nginx/:/etc/nginx/conf.d/
     networks:
       - quiz
 
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${MONGO_DB_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGO_DB_PASSWORD}'
+      MONGO_INITDB_DATABASE: '${MONGO_DB_DATABASE}'
+    volumes:
+      - 'mongodata:/data/db'
+    networks:
+      - quiz
+    ports:
+      - '${MONGO_DB_PORT}:${MONGO_DB_PORT}'
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb:'${MONGO_DB_PORT}' --quiet
+      retries: 3
+      timeout: 10s
+
 networks:
   quiz:
     driver: bridge
+
+volumes:
+  mongodata:
+    driver: local
+    external: false
