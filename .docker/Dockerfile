@@ -1,7 +1,9 @@
-FROM laradock/php-fpm:latest-7.4
+FROM laradock/php-fpm:latest-8.0
 
 ARG user
 ARG uid
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN set -xe; \
     apt-get update -yqq && \
@@ -13,8 +15,12 @@ RUN set -xe; \
       libzip-dev zip unzip && \
       docker-php-ext-configure zip && \
       docker-php-ext-install zip && \
-      php -m | grep -q 'zip'
+      php -m | grep -q 'zip' && \
+      chmod +x /usr/local/bin/install-php-extensions && sync && \
+      install-php-extensions mongodb-stable
 
+
+# NOTE: This might cause problems later
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN groupadd -g $uid $user
@@ -26,6 +32,6 @@ WORKDIR /var/www
 
 USER $user
 
-CMD ["sh", "-c", "cp -n .env.example .env && composer install && php artisan key:generate && php-fpm"]
+CMD ["sh", "-c", "cp -n .env.example.docker .env && composer install && php artisan key:generate && php artisan migrate && php-fpm"]
 
 EXPOSE 9000

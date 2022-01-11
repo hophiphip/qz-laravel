@@ -6,6 +6,11 @@ Application that allows user to take a quiz or to submit one.
   - [Docker](https://www.docker.com/)
 
 ## Quick start
+Setup `.env` file.
+```sh
+cp ./quiz/.env.example.docker .env
+```
+
 Start the application.
 ```sh
 docker-compose up -d
