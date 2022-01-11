@@ -18,7 +18,9 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Move to the app folder
-      run: cd ./quiz
+      working-directory: quiz
+      run: |
+        ls -la
       
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example.local', '.env');"
