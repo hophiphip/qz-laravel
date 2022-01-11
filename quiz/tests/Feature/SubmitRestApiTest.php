@@ -20,7 +20,7 @@ class SubmitRestApiTest extends TestCase
             ]],
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testRequestWithMissingAnswers()
@@ -30,7 +30,7 @@ class SubmitRestApiTest extends TestCase
             'answers' => null,
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testRequestWithNonExistentQuizUUID()

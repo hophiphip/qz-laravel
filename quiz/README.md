@@ -58,3 +58,13 @@ php artisan migrate
 ```
 php artisan serve --host=0.0.0.0 --port=8080
 ```
+
+---
+
+**NOTE**
+Setup local MongoDB with `Docker`.
+```sh
+docker run -d --name quizdb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_USERNAME} -e MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_PASSWORD} -e MONGO_INITDB_DATABASE=${MONGO_DB_AUTHENTICATION_DATABASE} mongo
+```
+
+---

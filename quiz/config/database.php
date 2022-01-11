@@ -91,6 +91,23 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'host' => env('MONGO_DB_HOST', '127.0.0.1'),
+            'port' => env('MONGO_DB_PORT', 27017),
+            'database' => env('MONGO_DB_DATABASE', 'homestead'),
+            'username' => env('MONGO_DB_USERNAME', 'homestead'),
+            'password' => env('MONGO_DB_PASSWORD', 'secret'),
+            'options' => [
+                'database' => env('MONGO_DB_AUTHENTICATION_DATABASE', 'admin'), // required with Mongo 3+
+            ],
+        ],
+
+        'mongodb_url' => [
+            'driver' => 'mongodb',
+            'dsn' => env('MONGO_DB_URI', 'mongodb+srv://username:password@<atlas-cluster-uri>/myappdb?retryWrites=true&w=majority'),
+            'database' => 'MONGO_DB_DATABASE',
+        ],
     ],
 
     /*
