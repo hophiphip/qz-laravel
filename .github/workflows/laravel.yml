@@ -16,6 +16,8 @@ jobs:
       with:
         php-version: '8.0'
     - uses: actions/checkout@v2
+    - name: Move to app folder
+      run: /bin/cd quiz
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example.local', '.env');"
     - name: Install Dependencies
