@@ -26,7 +26,7 @@ You can find `php.ini` file location by running
 php --ini
 ```
 
-### Install app depenencies
+### Install app dependencies
 ```sh
 composer install
 ```
