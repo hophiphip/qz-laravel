@@ -23,7 +23,7 @@ jobs:
         ls -la
       
     - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example.local', '.env');"
+      run: cp -n .env.example.local .env
       
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
