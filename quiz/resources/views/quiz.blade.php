@@ -16,7 +16,9 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </head>
 
+<!-- TODO: Cypress tests -->
 <!-- TODO: Moar alpine -->
+<!-- TODO: Add question completion status in 'one question per page mode' -->
 
 <body x-data="quiz">
     @include('shared.gohome')
