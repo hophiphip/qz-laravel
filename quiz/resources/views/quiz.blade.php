@@ -13,35 +13,38 @@
     <link href="/css/quiz.css" rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <!-- TODO: Add one question per page feature and make it default but the user can choose to show all questions at once -->
 
-<body>
+<body x-data="quiz">
     @include('shared.gohome')
 
-    <section id="quiz-contents" class="quiz-contents">
-        <h1 class="quiz-title">{{ $quiz->getTitle() }}</h1>
+    <div x-show="showAllQuestions">
+        <section id="quiz-contents" class="quiz-contents">
+            <h1 class="quiz-title">{{ $quiz->getTitle() }}</h1>
 
-        @foreach($quiz->getQuestions() as $key => $question)
-            <section id="{{ $question->getUUID() }}" class="quiz-question">
-                <h3>Question {{ $key }}</h3>
+            @foreach($quiz->getQuestions() as $key => $question)
+                <section id="{{ $question->getUUID() }}" class="quiz-question">
+                    <h3>Question {{ $key }}</h3>
 
-                <fieldset>
-                    <legend>
-                        {{ $question->getText() }}
-                    </legend>
+                    <fieldset>
+                        <legend>
+                            {{ $question->getText() }}
+                        </legend>
 
-                    @foreach($question->getChoices() as $key => $choice)
-                        <div>
-                            <input type="checkbox" id="{{ $choice->getUUID() }}" name="choice" value="{{ $choice->getUUID() }}" class="quiz-choice-checkbox">
-                            <label for="{{ $choice->getUUID() }}">{{ $choice->getText() }}</label>
-                        </div>
-                    @endforeach
-                </fieldset>
-            </section>
-        @endforeach
-    </section>
+                        @foreach($question->getChoices() as $key => $choice)
+                            <div>
+                                <input type="checkbox" id="{{ $choice->getUUID() }}" name="choice" value="{{ $choice->getUUID() }}" class="quiz-choice-checkbox">
+                                <label for="{{ $choice->getUUID() }}">{{ $choice->getText() }}</label>
+                            </div>
+                        @endforeach
+                    </fieldset>
+                </section>
+            @endforeach
+        </section>
+    </div>
 
     <div class="button-container">
         <button id="quiz-submit-button" onclick="">Submit</button>
@@ -127,6 +130,23 @@
                 }
             });
         }
+    </script>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('quiz', () => ({
+                showAllQuestions: true,
+                currentQuestionIdx: 0,
+
+                oneQuestion() {
+                    this.showAllQuestions = false;
+                },
+
+                allQuestions() {
+                    this.showAllQuestions = true;
+                },
+            }));
+        });
     </script>
 </body>
 
