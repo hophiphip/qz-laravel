@@ -19,3 +19,18 @@
 .result-container {
     text-align: center;
 }
+
+.settings-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.settings-button {
+    margin-left: 0.5rem;
+    padding: 0;
+}
+
+.settings-button svg {
+    width: 2rem;
+    height: 1.5rem;
+}

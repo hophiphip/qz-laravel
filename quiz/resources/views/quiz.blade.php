@@ -21,10 +21,24 @@
 <body x-data="quiz">
     @include('shared.gohome')
 
+    <h1 class="quiz-title">{{ $quiz->getTitle() }}</h1>
+
+    <div class="settings-container">
+        <button class="settings-button" x-on:onclick="oneQuestion">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <button class="settings-button" x-on:onclick="allQuestions">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
     <div x-show="showAllQuestions">
         <section id="quiz-contents" class="quiz-contents">
-            <h1 class="quiz-title">{{ $quiz->getTitle() }}</h1>
-
             @foreach($quiz->getQuestions() as $key => $question)
                 <section id="{{ $question->getUUID() }}" class="quiz-question">
                     <h3>Question {{ $key }}</h3>
@@ -44,6 +58,11 @@
                 </section>
             @endforeach
         </section>
+    </div>
+
+    <!-- One question per 'page' -->
+    <div x-show="!showAllQuestions">
+
     </div>
 
     <div class="button-container">
@@ -136,7 +155,6 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('quiz', () => ({
                 showAllQuestions: true,
-                currentQuestionIdx: 0,
 
                 oneQuestion() {
                     this.showAllQuestions = false;
