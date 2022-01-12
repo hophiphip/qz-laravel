@@ -12,59 +12,71 @@
     <link href="/css/app.css" rel="stylesheet" />
     <link href="/css/quiz.css" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </head>
 
-<!-- TODO: Add one question per page feature and make it default but the user can choose to show all questions at once -->
+<!-- TODO: Moar alpine -->
 
 <body x-data="quiz">
     @include('shared.gohome')
 
+    <!-- Quiz title -->
     <h1 class="quiz-title">{{ $quiz->getTitle() }}</h1>
 
+    <!-- Quiz settings -->
     <div class="settings-container">
-        <button class="settings-button" x-on:onclick="oneQuestion">
+        <button class="settings-button" x-on:click="oneQuestion">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
             </svg>
         </button>
 
-        <button class="settings-button" x-on:onclick="allQuestions">
+        <button class="settings-button" x-on:click="allQuestions">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
             </svg>
         </button>
     </div>
 
-    <div x-show="showAllQuestions">
-        <section id="quiz-contents" class="quiz-contents">
-            @foreach($quiz->getQuestions() as $key => $question)
-                <section id="{{ $question->getUUID() }}" class="quiz-question">
-                    <h3>Question {{ $key }}</h3>
+    <!-- Quiz questions -->
+    <section id="quiz-contents" class="quiz-contents">
+        @foreach($quiz->getQuestions() as $key => $question)
+            <section id="{{ $question->getUUID() }}" class="quiz-question" x-show="showAllQuestions || (currentQuestionIdx == {{ $key }})">
+                <h3>Question {{ $key }}</h3>
 
-                    <fieldset>
-                        <legend>
-                            {{ $question->getText() }}
-                        </legend>
+                <fieldset>
+                    <legend>
+                        {{ $question->getText() }}
+                    </legend>
 
-                        @foreach($question->getChoices() as $key => $choice)
-                            <div>
-                                <input type="checkbox" id="{{ $choice->getUUID() }}" name="choice" value="{{ $choice->getUUID() }}" class="quiz-choice-checkbox">
-                                <label for="{{ $choice->getUUID() }}">{{ $choice->getText() }}</label>
-                            </div>
-                        @endforeach
-                    </fieldset>
-                </section>
-            @endforeach
-        </section>
+                    @foreach($question->getChoices() as $key => $choice)
+                        <div>
+                            <input type="checkbox" id="{{ $choice->getUUID() }}" name="choice" value="{{ $choice->getUUID() }}" class="quiz-choice-checkbox">
+                            <label for="{{ $choice->getUUID() }}">{{ $choice->getText() }}</label>
+                        </div>
+                    @endforeach
+                </fieldset>
+            </section>
+        @endforeach
+    </section>
+
+    <!-- Next & prev question button -->
+    <div class="button-container" x-show="!showAllQuestions">
+        <button x-on:click="prevQuestion">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+
+        <button x-on:click="nextQuestion">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
     </div>
 
-    <!-- One question per 'page' -->
-    <div x-show="!showAllQuestions">
-
-    </div>
-
+    <!-- Submit button -->
     <div class="button-container">
         <button id="quiz-submit-button" onclick="">Submit</button>
     </div>
@@ -155,6 +167,17 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('quiz', () => ({
                 showAllQuestions: true,
+
+                currentQuestionIdx: 0,
+                questionCount: {{ count($quiz->getQuestions()) }},
+
+                nextQuestion() {
+                    this.currentQuestionIdx = (this.currentQuestionIdx + 1) % this.questionCount;
+                },
+
+                prevQuestion() {
+                    this.currentQuestionIdx = (this.currentQuestionIdx - 1 + this.questionCount) % this.questionCount;
+                },
 
                 oneQuestion() {
                     this.showAllQuestions = false;
