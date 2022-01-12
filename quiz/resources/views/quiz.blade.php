@@ -174,6 +174,8 @@
                 questionCount: {{ count($quiz->getQuestions()) }},
 
                 nextQuestion() {
+                    this.testCrap();
+
                     this.currentQuestionIdx = (this.currentQuestionIdx + 1) % this.questionCount;
                 },
 
@@ -188,6 +190,37 @@
                 allQuestions() {
                     this.showAllQuestions = true;
                 },
+
+                // TODO: That is a fancy workaround
+                // Dumb but cool test
+                testCrap() {
+                    testVal = {
+                        title: `{{ $quiz->getTitle() }}`,
+                        uuid: `{{ $quiz->getUUID() }}`,
+                        questions: [],
+                    };
+
+                    let question;
+                    @foreach($quiz->getQuestions() as $key => $question)
+                        question = {
+                            uuid: `{{ $question->getUUID() }}`,
+                            text: `{{ $question->getText() }}`,
+                            choices: [],
+                        };
+
+                        @foreach($question->getChoices() as $key => $choice)
+                            question.choices.push({
+                                uuid: `{{ $choice->getUUID() }}`,
+                                text: `{{ $choice->getText() }}`,
+                                isCorrect: `{{ $choice->isCorrect() }}` !== "",
+                            });
+                        @endforeach
+
+                        testVal.questions.push(question);
+                    @endforeach
+
+                    console.log(testVal);
+                }
             }));
         });
     </script>
