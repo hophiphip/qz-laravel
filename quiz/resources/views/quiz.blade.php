@@ -173,7 +173,8 @@
                 currentQuestionIdx: 0,
                 questionCount: {{ count($quiz->getQuestions()) }},
 
-                questions: {
+                // NOTE: I think it would be better to store questions like that to show their completion status is real time
+                quiz: {
                     title: `{{ $quiz->getTitle() }}`,
                     uuid: `{{ $quiz->getUUID() }}`,
                     questions: [
@@ -186,12 +187,27 @@
                                 {
                                     uuid: `{{ $choice->getUUID() }}`,
                                     text: `{{ $choice->getText() }}`,
+                                    isSelected: false,
                                 },
                                 @endforeach
                             ],
                         },
                         @endforeach
                     ],
+                },
+
+                submitQuestions() {
+                    // Flat map questions to answers
+                    const answers = this.quiz.questions.flatMap(question => [
+                        {
+                            questionUUID: question.uuid,
+
+                            // Filter only the selected choices and map a choice to it's UUID
+                            choices: question.choices.filter(choice => choice.isSelected).flatMap(selectedChoice => [ selectedChoice.uuid ]),
+                        }
+                    ]);
+
+                    // DO the fetch ...
                 },
 
                 nextQuestion() {
