@@ -30,11 +30,16 @@ class QuizCollection extends Migration
      */
     public function up()
     {
-        // Populate the database with some initial values
+        Schema::create($this->tableName, function (Blueprint $collection) {
+            $collection->string('uuid');
+            $collection->string('title');
 
-        Quiz::create(
-            Serializer::quizToArray(Serializer::SampleQuiz())
-        );
+            // store array as json
+            $collection->json('questions');
+
+            // timestamps just in case
+            $collection->timestamps();
+        });
     }
 
     /**

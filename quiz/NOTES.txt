@@ -1,0 +1,18 @@
+# Interact with the app
+php artisan tinker
+
+# Drop the collection
+>>> Illuminate\Support\Facades\Schema::connection('mongodb')->table('quiz_collection', function (Illuminate\Database\Schema\Blueprint $c) { $c->drop(); });
+
+
+# IN case composer can't find a new seeder.
+Example:
+include(/home/hophiphip/dev/php/qz-laravel/quiz/vendor/composer/../../database/seeders/DatabaseSeeder.php): Failed to open stream: No such file or directory
+
+Run:
+composer dump-autoload
+
+Basically, because Composer can't see the migration files you are creating, you are having to run the dump-autoload command which won't download anything new, but looks for all of the classes it needs to include again. It just regenerates the list of all classes that need to be included in the project (autoload_classmap.php), and this is why your migration is working after you run that command.
+
+# Seed the database:
+php artisan migrate:refresh --seed

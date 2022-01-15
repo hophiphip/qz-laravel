@@ -21,6 +21,7 @@
 <!-- TODO: Add question completion status in 'one question per page mode' -->
 
 <body x-data="quiz">
+
     @include('shared.gohome')
 
     <!-- Quiz title -->
@@ -28,12 +29,14 @@
 
     <!-- Quiz settings -->
     <div class="settings-container">
+        <!-- Show one question per page -->
         <button class="settings-button" x-on:click="oneQuestion">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
             </svg>
         </button>
 
+        <!-- Show all questions on one page -->
         <button class="settings-button" x-on:click="allQuestions">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
@@ -63,7 +66,7 @@
         @endforeach
     </section>
 
-    <!-- Next & prev question button -->
+    <!-- Next & prev question button (only visible in `one question per page mode` -->
     <div class="button-container" x-show="!showAllQuestions">
         <button x-on:click="prevQuestion">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,7 +190,12 @@
                                 {
                                     uuid: `{{ $choice->getUUID() }}`,
                                     text: `{{ $choice->getText() }}`,
+
+                                    // did user select this question
                                     isSelected: false,
+
+                                    // did user visit this question
+                                    isVisited: false,
                                 },
                                 @endforeach
                             ],
