@@ -17,7 +17,6 @@
 </head>
 
 <!-- TODO: Cypress tests -->
-<!-- TODO: Add question completion status in 'one question per page mode' -->
 
 <body x-data="quiz">
 

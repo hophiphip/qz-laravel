@@ -1,0 +1,78 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: quiz
+        uid: 1000
+      context: ./
+      dockerfile: ./.docker/Dockerfile
+    image: quiz
+    container_name: quiz-app-e2e
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./quiz/:/var/www
+    networks:
+      - quiz
+    logging:
+      driver: none
+
+  nginx:
+    image: nginx:alpine
+    container_name: quiz-nginx-e2e
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./quiz/:/var/www
+      - ./.docker/nginx/:/etc/nginx/conf.d/
+    networks:
+      - quiz
+    logging:
+      driver: none
+
+  mongodb:
+    image: mongo
+    container_name: quiz-mongodb-e2e
+    restart: unless-stopped
+    command: mongod --quiet --logpath /dev/null
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: '${MONGO_DB_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGO_DB_PASSWORD}'
+      MONGO_INITDB_DATABASE: '${MONGO_DB_DATABASE}'
+    volumes:
+      - 'mongodata:/data/db'
+    networks:
+      - quiz
+    ports:
+      - '${MONGO_DB_PORT}:${MONGO_DB_PORT}'
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb:'${MONGO_DB_PORT}' --quiet
+      retries: 3
+      timeout: 10s
+    logging:
+      driver: none
+
+  cypress:
+    image: "cypress/included:4.4.0"
+    depends_on:
+      - mongodb
+      - nginx
+      - app
+    environment:
+      - CYPRESS_baseUrl=http://nginx:80
+    working_dir: /e2e
+    volumes:
+      - ./.docker/e2e:/e2e
+    networks:
+      - quiz
+
+networks:
+  quiz:
+    driver: bridge
+
+volumes:
+  mongodata:
+    driver: local
+    external: false

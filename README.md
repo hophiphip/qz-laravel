@@ -22,5 +22,9 @@ Run tests after starting the app.
 docker-compose exec app php artisan test
 ```
 
-## Cypress tests
-...
+## End-to-End tests
+1. [Setup `.env` file if necessary](#quick-start).
+2. Run end-to-end tests.
+```shell
+docker-compose -f docker-compose-e2e.yml up --exit-code-from cypress
+```
