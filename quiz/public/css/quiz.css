@@ -16,8 +16,48 @@
     margin-top: 2rem;
 }
 
+.button-container button {
+    background-color: #252525;
+}
+
+.button-container button:hover {
+    background-color: #353535;
+}
+
+.button-container button:active {
+    background-color: #353535;
+}
+
 .result-container {
     text-align: center;
+}
+
+.quiz-status {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.question-status {
+    border: 1px outset transparent;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    margin-right: 0.5rem;
+    font-size: 12px;
+}
+
+.question-status-visited {
+    border: 1px outset transparent;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    margin-right: 0.5rem;
+    font-size: 12px;
+    background-color: #666666;;
+}
+
+.question-status-current {
+    border: 1px outset white;
 }
 
 .settings-container {
