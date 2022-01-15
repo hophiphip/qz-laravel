@@ -32,6 +32,6 @@ WORKDIR /var/www
 
 USER $user
 
-CMD ["sh", "-c", "cp -n .env.example.docker .env && composer install && php artisan key:generate && php artisan migrate && php-fpm"]
+CMD ["sh", "-c", "cp -n .env.example.docker .env && composer install && php artisan key:generate && php artisan migrate:refresh --seed && php-fpm"]
 
 EXPOSE 9000
