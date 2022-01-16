@@ -14,7 +14,7 @@ jobs:
   app-tests:
     name: Quiz Unit and Feature tests
 
-    runs-on: [self-hosted, ubuntu-latest]
+    runs-on: ubuntu-latest
 
     services:
       mongodb:
