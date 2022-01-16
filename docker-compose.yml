@@ -27,6 +27,8 @@ services:
     volumes:
       - ./quiz/:/var/www
       - ./.docker/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - app
     networks:
       - quiz
 

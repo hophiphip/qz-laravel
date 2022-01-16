@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  app-tests:
+    name: Quiz Unit and Feature tests
+
+    runs-on: [self-hosted, ubuntu-latest]
+
+    services:
+      mongodb:
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: testUser
+          MONGO_INITDB_ROOT_PASSWORD: S3cr3tPassw0rd
+          MONGO_INITDB_DATABASE: quizTest
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Initialize PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: curl,mbstring,xdebug,mongodb-mongodb/mongo-php-driver@v1.9
+          coverage: xdebug
+          tools: composer
+
+      - name: Show PHP version
+        run: php -v && composer -V
+    
+      - name: Show contents of the app folder
+        working-directory: quiz
+        run: |
+          ls -la
+      
+      - name: Create .env file
+        working-directory: quiz
+        run: |
+          cat << EOF > .env
+          APP_KEY=
+          APP_DEBUG=true
+          APP_URL=http://localhost
+          LOG_CHANNEL=stack
+          LOG_LEVEL=debug
+          DB_CONNECTION=mongodb
+          MONGO_DB_CONNECTION=mongodb
+          MONGO_DB_HOST=localhost
+          MONGO_DB_PORT=27017
+          MONGO_DB_DATABASE=$MONGO_DATABASE
+          MONGO_DB_AUTHENTICATION_DATABASE=admin
+          MONGO_DB_USERNAME=$MONGO_USER
+          MONGO_DB_PASSWORD=$MONGO_PASS
+          EOF
+        env:
+          MONGO_USER: testUser
+          MONGO_PASS: S3cr3tPassw0rd
+          MONGO_DATABASE: quizTest
+
+      - name: Install Dependencies
+        working-directory: quiz
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Generate key
+        working-directory: quiz
+        run: php artisan key:generate
+
+      - name: Test cat
+        working-directory: quiz
+        run: |
+          cat .env
+
+      - name: Run migrations and seed the database
+        working-directory: quiz
+        run: php artisan migrate:refresh --seed
+
+      - name: Directory Permissions
+        working-directory: quiz
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        working-directory: quiz
+        run: php artisan test
