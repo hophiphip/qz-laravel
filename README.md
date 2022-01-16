@@ -28,3 +28,11 @@ docker-compose exec app php artisan test
 ```shell
 docker-compose -f docker-compose-e2e.yml up --exit-code-from cypress
 ```
+
+--- 
+
+***NOTE***
+An existing `.env` file in `quiz` folder might cause config conflicts.
+It is recommended to delete `.env` in `quiz` folder when setting up the project in `Docker`.
+
+---

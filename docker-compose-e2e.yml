@@ -65,6 +65,7 @@ services:
     working_dir: /e2e
     volumes:
       - ./.docker/e2e:/e2e
+      - ./quiz/cypress:/e2e/cypress
     networks:
       - quiz
 

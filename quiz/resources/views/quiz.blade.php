@@ -95,11 +95,14 @@
     </div>
 
     <script>
+        const initialQuestionIndex = 0;
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('quiz', () => ({
-                showAllQuestions: false,
+                // default is one-question-per-page mode, but only if there is more than 1 question
+                showAllQuestions: {{ count($quiz->getQuestions()) }} <= 1,
 
-                currentQuestionIdx: 0,
+                currentQuestionIdx: initialQuestionIndex,
                 questionCount: {{ count($quiz->getQuestions()) }},
 
                 quizResultContainerText: 'Submit to get quiz results..',
@@ -109,12 +112,12 @@
                     title: `{{ $quiz->getTitle() }}`,
                     uuid: `{{ $quiz->getUUID() }}`,
                     questions: [
-                            @foreach($quiz->getQuestions() as $key => $question)
+                            @foreach($quiz->getQuestions() as $questionKey => $question)
                         {
                             uuid: `{{ $question->getUUID() }}`,
                             text: `{{ $question->getText() }}`,
                             choices: [
-                                    @foreach($question->getChoices() as $key => $choice)
+                                    @foreach($question->getChoices() as $choiceKey => $choice)
                                 {
                                     uuid: `{{ $choice->getUUID() }}`,
                                     text: `{{ $choice->getText() }}`,
@@ -126,7 +129,7 @@
                             ],
 
                             // was question visited by the user (was at least one choice provided)
-                            isVisited: false,
+                            isVisited: {{ $questionKey }} === initialQuestionIndex,
                         },
                         @endforeach
                     ],
