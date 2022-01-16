@@ -17,6 +17,8 @@ services:
       - quiz
     logging:
       driver: none
+    depends_on:
+      - mongodb
 
   nginx:
     image: nginx:alpine
