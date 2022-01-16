@@ -1,6 +1,11 @@
-it('Test create a quiz redirect', () => {
-    cy.visit('/');
+/// <reference types="cypress" />
 
-    cy.get('a#new-quiz').click();
-    cy.location('pathname').should('eq', '/new');
+describe('quiz-app', () => {
+    it('Create a new quiz redirects to /new route', () => {
+        cy.visit('/');
+
+        cy.get('a#new-quiz').click();
+        cy.location('pathname').should('eq', '/new');
+    });
 });
+

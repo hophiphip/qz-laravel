@@ -20,7 +20,6 @@ RUN set -xe; \
       install-php-extensions mongodb-stable
 
 
-# NOTE: This might cause problems later
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN groupadd -g $uid $user

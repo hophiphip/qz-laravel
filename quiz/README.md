@@ -70,7 +70,11 @@ docker run -d --name quizdb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=${MONGO
 ---
 
 ### Run Cypress tests
-Start the app and then run 
+1. Install Node JS dependencies
+```shell
+npm install
+```
+2. Start the app and then run 
 ```shell
 CYPRESS_BASE_URL=http://127.0.0.1:8000 ./node_modules/cypress/bin/cypress open
 ```
