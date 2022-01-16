@@ -203,9 +203,6 @@
                                 this.globalError = 'Could not submit a new quiz.';
                             });
                     }
-
-                    // TODO: Remove later
-                    console.log({title: this.title, questions: JSON.parse(JSON.stringify(this.questions))});
                 },
             }))
         })
