@@ -1,6 +1,6 @@
 name: CI
 
-# TODO: Mb. only run Unit tests without MongoDB ?
+# TODO: Unit tests do not require MongoDB service - add service and run Feature tests as well.
 
 on:
   workflow_dispatch:
@@ -14,25 +14,9 @@ on:
 
 jobs:
   app-tests:
-    name: Quiz Unit and Feature tests
+    name: Quiz Unit tests
 
     runs-on: ubuntu-latest
-
-    services:
-      mongodb:
-        image: mongo
-        env:
-          MONGO_INITDB_ROOT_USERNAME: testUser
-          MONGO_INITDB_ROOT_PASSWORD: S3cr3tPassw0rd
-          MONGO_INITDB_DATABASE: quizTest
-          runner: self-hosted
-        options: >-
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
 
     steps:
       - uses: actions/checkout@v2
@@ -47,14 +31,6 @@ jobs:
         env:
           runner: self-hosted
 
-      - name: Build MongoDB driver
-        run: |
-          pecl install mongodb
-
-      - name: Update php.ini (install MongoDB driver)
-        run: |
-          echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
-
       - name: Show PHP version
         run: php -v && composer -V
 
@@ -62,6 +38,14 @@ jobs:
         working-directory: quiz
         run: |
           ls -la
+
+      - name: Build MongoDB driver
+        run: |
+          pecl install mongodb
+
+      - name: Update php.ini (install MongoDB driver)
+        run: |
+          echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
       
       - name: Create .env file
         working-directory: quiz
@@ -76,24 +60,15 @@ jobs:
           MONGO_DB_CONNECTION=mongodb
           MONGO_DB_HOST=127.0.0.1
           MONGO_DB_PORT=27017
-          MONGO_DB_DATABASE=quizTest
+          MONGO_DB_DATABASE=${MONGO_DATABASE}
           MONGO_DB_AUTHENTICATION_DATABASE=admin
-          MONGO_DB_USERNAME=testUser
-          MONGO_DB_PASSWORD=S3cr3tPassw0rd
+          MONGO_DB_USERNAME=${MONGO_USER}
+          MONGO_DB_PASSWORD=${MONGO_PASS}
           EOF
         env:
           MONGO_USER: testUser
           MONGO_PASS: S3cr3tPassw0rd
           MONGO_DATABASE: quizTest
-
-          DB_CONNECTION: mongodb
-          MONGO_DB_CONNECTION: mongodb
-          MONGO_DB_HOST: 127.0.0.1
-          MONGO_DB_PORT: 27017
-          MONGO_DB_DATABASE: quizTest
-          MONGO_DB_AUTHENTICATION_DATABASE: admin
-          MONGO_DB_USERNAME: testUser
-          MONGO_DB_PASSWORD: S3cr3tPassw0rd
 
       - name: Install Dependencies
         working-directory: quiz
@@ -103,45 +78,10 @@ jobs:
         working-directory: quiz
         run: php artisan key:generate
 
-      - name: Test cat
-        working-directory: quiz
-        run: |
-          cat .env
-
-      - name: Run migrations and seed the database
-        working-directory: quiz
-        run: php artisan migrate:refresh --seed
-        env:
-          MONGO_USER: testUser
-          MONGO_PASS: S3cr3tPassw0rd
-          MONGO_DATABASE: quizTest
-
-          DB_CONNECTION: mongodb
-          MONGO_DB_CONNECTION: mongodb
-          MONGO_DB_HOST: 127.0.0.1
-          MONGO_DB_PORT: 27017
-          MONGO_DB_DATABASE: quizTest
-          MONGO_DB_AUTHENTICATION_DATABASE: admin
-          MONGO_DB_USERNAME: testUser
-          MONGO_DB_PASSWORD: S3cr3tPassw0rd
-
       - name: Directory Permissions
         working-directory: quiz
         run: chmod -R 777 storage bootstrap/cache
 
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
+      - name: Execute tests (only unit tests)
         working-directory: quiz
-        run: php artisan test
-        env:
-          MONGO_USER: testUser
-          MONGO_PASS: S3cr3tPassw0rd
-          MONGO_DATABASE: quizTest
-
-          DB_CONNECTION: mongodb
-          MONGO_DB_CONNECTION: mongodb
-          MONGO_DB_HOST: 127.0.0.1
-          MONGO_DB_PORT: 27017
-          MONGO_DB_DATABASE: quizTest
-          MONGO_DB_AUTHENTICATION_DATABASE: admin
-          MONGO_DB_USERNAME: testUser
-          MONGO_DB_PASSWORD: S3cr3tPassw0rd
+        run: php artisan test --testsuite Unit
