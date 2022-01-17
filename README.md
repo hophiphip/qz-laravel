@@ -2,6 +2,9 @@
 
 Application that allows user to take a quiz or to submit one.
 
+Try it:
+  - https://qz-laravel.herokuapp.com/
+
 ## Requirements
   - [Docker](https://www.docker.com/)
 
