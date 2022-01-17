@@ -34,10 +34,10 @@ services:
     networks:
       - quiz
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:80"]
+      test: curl -f http://127.0.0.1:80 || exit 1
       retries: 5
       timeout: 10s
-      interval: 10s
+      interval: 20s
       start_period: 10s
     depends_on:
       - app
@@ -70,6 +70,8 @@ services:
     image: "cypress/included:4.4.0"
     depends_on:
       mongodb:
+        condition: service_healthy
+      nginx:
         condition: service_healthy
     environment:
       - CYPRESS_baseUrl=http://nginx:80
