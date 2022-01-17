@@ -25,72 +25,75 @@
     <!-- Quiz title -->
     <h1 class="quiz-title" x-text="quiz.title"></h1>
 
-    <!-- Quiz settings -->
-    <div class="settings-container">
-        <!-- Show one question per page -->
-        <button class="settings-button" x-on:click="oneQuestion">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
-            </svg>
-        </button>
+    <div id="quiz-main" x-show="!wasQuizSubmitted">
 
-        <!-- Show all questions on one page -->
-        <button class="settings-button" x-on:click="allQuestions">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-            </svg>
-        </button>
-    </div>
+        <!-- Quiz settings -->
+        <div class="settings-container">
+            <!-- Show one question per page -->
+            <button class="settings-button" x-on:click="oneQuestion">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+            </button>
 
-    <!-- Quiz questions -->
-    <section id="quiz-contents" class="quiz-contents">
-        <template x-for="(question, questionIndex) in quiz.questions">
-            <section x-bind:id="question.uuid" class="quiz-question" x-show="showAllQuestions || (currentQuestionIdx == questionIndex)">
-                <h3 x-text="`Question ${questionIndex + 1}`"></h3>
-
-                <fieldset>
-                    <legend x-text="question.text">
-                    </legend>
-
-                    <template x-for="(choice, choiceIndex) in question.choices">
-                        <div>
-                            <input type="checkbox" x-bind:id="choice.uuid" name="choice" x-bind:value="choice.uuid" x-bind:checked="choice.isSelected" x-on:click="choice.isSelected = !choice.isSelected">
-                            <label x-bind::for="choice.uuid" x-text="choice.text"></label>
-                        </div>
-                    </template>
-                </fieldset>
-            </section>
-        </template>
-
-        <!-- Quiz completions status -->
-        <div class="quiz-status">
-            <template x-for="(question , questionIndex) in quiz.questions">
-                <button x-show="!showAllQuestions" x-text="questionIndex + 1" :class="{ 'question-status-visited': question.isVisited, 'question-status': !question.isVisited, 'question-status-current': questionIndex === currentQuestionIdx }" x-on:click="currentQuestionIdx = questionIndex; question.isVisited = true;"></button>
-            </template>
+            <!-- Show all questions on one page -->
+            <button class="settings-button" x-on:click="allQuestions">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
-    </section>
 
-    <!-- Next & prev question button (only visible in `one question per page mode` -->
-    <div class="button-container" x-show="!showAllQuestions">
-        <button x-on:click="prevQuestion">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
+        <!-- Quiz questions -->
+        <section id="quiz-contents" class="quiz-contents">
+            <template x-for="(question, questionIndex) in quiz.questions">
+                <section x-bind:id="question.uuid" class="quiz-question" x-show="showAllQuestions || (currentQuestionIdx == questionIndex)">
+                    <h3 x-text="`Question ${questionIndex + 1}`"></h3>
 
-        <button x-on:click="nextQuestion">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-        </button>
+                    <fieldset>
+                        <legend x-text="question.text">
+                        </legend>
+
+                        <template x-for="(choice, choiceIndex) in question.choices">
+                            <div>
+                                <input type="checkbox" x-bind:id="choice.uuid" name="choice" x-bind:value="choice.uuid" x-bind:checked="choice.isSelected" x-on:click="choice.isSelected = !choice.isSelected">
+                                <label x-bind::for="choice.uuid" x-text="choice.text"></label>
+                            </div>
+                        </template>
+                    </fieldset>
+                </section>
+            </template>
+
+            <!-- Quiz completions status -->
+            <div class="quiz-status">
+                <template x-for="(question , questionIndex) in quiz.questions">
+                    <button x-show="!showAllQuestions" x-text="questionIndex + 1" :class="{ 'question-status-visited': question.isVisited, 'question-status': !question.isVisited, 'question-status-current': questionIndex === currentQuestionIdx }" x-on:click="currentQuestionIdx = questionIndex; question.isVisited = true;"></button>
+                </template>
+            </div>
+        </section>
+
+        <!-- Next & prev question button (only visible in `one question per page mode` -->
+        <div class="button-container" x-show="!showAllQuestions">
+            <button x-on:click="prevQuestion">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <button x-on:click="nextQuestion">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
     </div>
 
     <!-- Submit button -->
     <div class="button-container">
-        <button x-on:click="submitAnswers">Submit</button>
+        <button x-on:click="submitAnswersOrRetry" x-text="wasQuizSubmitted ? 'Retry' : 'Submit'"></button>
     </div>
 
-    <div class="result-container">
+    <div class="result-container" x-show="wasQuizSubmitted">
         <h3 x-text="quizResultContainerText"></h3>
     </div>
 
@@ -106,6 +109,8 @@
                 questionCount: {{ count($quiz->getQuestions()) }},
 
                 quizResultContainerText: 'Submit to get quiz results..',
+
+                wasQuizSubmitted: false,
 
                 // NOTE: I think it would be better to store questions like that to show their completion status is real time
                 quiz: {
@@ -135,7 +140,13 @@
                     ],
                 },
 
-                submitAnswers() {
+                submitAnswersOrRetry() {
+                    // Retry
+                    if (this.wasQuizSubmitted) {
+                        this.wasQuizSubmitted = false;
+                        return;
+                    }
+
                     // Flat map questions to answers
                     const answers = this.quiz.questions.flatMap(question => [
                         {
@@ -167,6 +178,7 @@
                                 });
                             }
 
+                            this.wasQuizSubmitted = true;
                             this.quizResultContainerText = data.result !== undefined ? `Quiz completion rate: ${data.result * 100}%` : 'Could not calculate quiz results!';
                         })
                         // Handle the quiz validation errors
