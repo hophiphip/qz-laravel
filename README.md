@@ -22,11 +22,13 @@ docker-compose up -d
 --- 
 
 ***NOTE***
-Sometimes right after starting the app it might return `502 Bad Gateway` error. 
-This error appears because `Nginx` does not wait for the `app` to start.
+On `Windows` right after starting the app it might return `502 Bad Gateway` error. 
+This error appears because `Nginx` does not wait for the `app` to start, or it takes too long for the service to start.
 `The issue can be resolved by refreshing the page.`
 
-End-to-end testing setup uses `health checks` to solve this problem. 
+End-to-end testing setup uses `health checks` to solve this problem.
+
+Yet it still fails on `Windows`, but I just don't care.
 
 ---
 
