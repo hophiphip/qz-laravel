@@ -41,11 +41,7 @@ jobs:
 
       - name: Build MongoDB driver
         run: |
-          pecl install mongodb
-
-      - name: Update php.ini (install MongoDB driver)
-        run: |
-          echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+          pecl install -f mongodb
 
       - name: Create .env file
         working-directory: quiz
