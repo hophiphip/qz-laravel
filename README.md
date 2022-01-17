@@ -28,7 +28,7 @@ This error appears because `Nginx` does not wait for the `app` to start, or it t
 
 End-to-end testing setup uses `health checks` to solve this problem.
 
-Yet it still fails on `Windows`, but I just don't care.
+Yet e2e tests still fail on `Windows`, but I just don't care.
 
 ---
 
