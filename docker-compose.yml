@@ -46,11 +46,9 @@ services:
     ports:
       - '${MONGO_DB_PORT}:${MONGO_DB_PORT}'
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh mongodb:'${MONGO_DB_PORT}' --quiet
+      test: echo 'db.runCommand("ping").ok' | mongo 127.0.0.1:27017/admin --quiet
       retries: 5
       timeout: 10s
-      interval: 10s
-      start_period: 10s
 
 networks:
   quiz:
