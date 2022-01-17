@@ -84,3 +84,11 @@ CYPRESS_BASE_URL=http://127.0.0.1:8000 ./node_modules/cypress/bin/cypress open
 You may change `CYPRESS_BASE_URL` if necessary. But by default when running the app with `php artisan serve` it  will run on `127.0.0.1:8000`.
 
 ---
+
+### Run and test CI/CD config locally
+Requires [act](https://github.com/nektos/act) to run GitHub Actions locally.
+
+Run in directory that contains `.github/workflows`
+```shell
+act -P self-hosted=catthehacker/ubuntu:act-latest
+```

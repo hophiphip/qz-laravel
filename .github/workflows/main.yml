@@ -16,7 +16,7 @@ jobs:
   app-tests:
     name: Quiz Unit tests
 
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted,linux]
 
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
       - name: Update php.ini (install MongoDB driver)
         run: |
           echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
-      
+
       - name: Create .env file
         working-directory: quiz
         run: |
