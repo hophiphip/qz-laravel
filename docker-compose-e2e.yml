@@ -1,5 +1,5 @@
 version: "2.4"
-# NOTE: Docker compose version is set to < 3 because of an easier way of doing a service startup status: condition: service_healthy (Not supported in ver. > 3)
+# NOTE: Docker compose version is set to < 3 because it is an easier way of checking a service startup status: condition: service_healthy (Not supported in ver. > 3)
 services:
   app:
     build:
